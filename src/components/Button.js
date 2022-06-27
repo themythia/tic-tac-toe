@@ -7,6 +7,8 @@ const Button = ({
   setGameOver,
   setHighlight,
 }) => {
+  // button hoverlandiginda background ve
+  // text renkleri icin tailwind classlari
   const color =
     btn[index] === 'X'
       ? 'hover:bg-customRed text-customRed'
@@ -14,6 +16,8 @@ const Button = ({
       ? 'hover:bg-customBlue text-customBlue'
       : 'hover:bg-slate-400';
 
+  // oyun sonunda kazandiran buttonlarin
+  // border renkleri icin tailwind classlari
   const borderColor =
     highlight && btn[index] === 'X'
       ? 'border-customRed'
@@ -21,15 +25,20 @@ const Button = ({
       ? 'border-customBlue'
       : 'border-black';
 
+  const reset = () => {
+    setBtn({});
+    setGameOver(false);
+    setHighlight([]);
+  };
+
   const handleButtonState = () => {
-    if (gameOver) {
-      setBtn({});
-      setGameOver(false);
-      setHighlight({});
-    } else if (btn[index] === '' || !btn[index])
-      setBtn((btn) => ({ ...btn, [index]: 'X' }));
-    else if (btn[index] === 'X') setBtn((btn) => ({ ...btn, [index]: 'O' }));
-    else setBtn((btn) => ({ ...btn, [index]: '' }));
+    if (gameOver) reset();
+    // eger button bos ise
+    else if (btn[index] === '' || !btn[index]) setBtn({ ...btn, [index]: 'X' });
+    // eger button X ise
+    else if (btn[index] === 'X') setBtn({ ...btn, [index]: 'O' });
+    // eger button O ise
+    else setBtn({ ...btn, [index]: '' });
   };
 
   return (

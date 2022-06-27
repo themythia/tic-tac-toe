@@ -3,52 +3,32 @@ import Button from './Button';
 
 const ButtonContainer = () => {
   const [btn, setBtn] = useState({});
-  const [highlight, setHighlight] = useState({});
+  const [highlight, setHighlight] = useState([]);
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     // yatay kontrol
     for (let i = 0; i <= 6; i += 3) {
-      if (
-        btn[0 + i] + btn[1 + i] + btn[2 + i] === 'XXX' ||
-        btn[0 + i] + btn[1 + i] + btn[2 + i] === 'OOO'
-      ) {
-        setHighlight({
-          [0 + i]: true,
-          [1 + i]: true,
-          [2 + i]: true,
-        });
-      }
+      const check = btn[i] + btn[i + 1] + btn[i + 2];
+      if (check === 'XXX' || check === 'OOO') setHighlight([i, i + 1, i + 2]);
     }
     // dikey kontrol
     for (let i = 0; i <= 2; i++) {
-      if (
-        btn[0 + i] + btn[3 + i] + btn[6 + i] === 'XXX' ||
-        btn[0 + i] + btn[3 + i] + btn[6 + i] === 'OOO'
-      ) {
-        setHighlight({
-          [0 + i]: true,
-          [3 + i]: true,
-          [6 + i]: true,
-        });
-      }
+      const check = btn[i] + btn[i + 3] + btn[i + 6];
+      if (check === 'XXX' || check === 'OOO') setHighlight([i, i + 3, i + 6]);
     }
     // capraz kontrol
-    if (
-      btn[0] + btn[4] + btn[8] === 'XXX' ||
-      btn[0] + btn[4] + btn[8] === 'OOO'
-    ) {
-      setHighlight({ 0: true, 4: true, 8: true });
-    } else if (
-      btn[2] + btn[4] + btn[6] === 'XXX' ||
-      btn[2] + btn[4] + btn[6] === 'OOO'
-    ) {
-      setHighlight({ 2: true, 4: true, 6: true });
-    }
+    const checkDiagonal1 = btn[0] + btn[4] + btn[8]; // sol ustten sag asagiya
+    const checkDiagonal2 = btn[2] + btn[4] + btn[6]; // sag ustten sol asagiya
+
+    if (checkDiagonal1 === 'XXX' || checkDiagonal1 === 'OOO')
+      setHighlight([0, 4, 8]);
+    else if (checkDiagonal2 === 'XXX' || checkDiagonal2 === 'OOO')
+      setHighlight([2, 4, 6]);
   }, [btn]);
 
   useEffect(() => {
-    if (Object.keys(highlight).length === 3) setGameOver(true);
+    if (highlight.length === 3) setGameOver(true);
   }, [highlight]);
 
   return (
@@ -59,7 +39,7 @@ const ButtonContainer = () => {
           btn={btn}
           setBtn={setBtn}
           index={index}
-          highlight={highlight[index]}
+          highlight={highlight.includes(index)}
           setHighlight={setHighlight}
           gameOver={gameOver}
           setGameOver={setGameOver}
